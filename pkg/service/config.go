@@ -58,6 +58,8 @@ type RepositoryConfig struct {
 	BaseDir string `json:"base_dir,omitempty"`
 	Branch  string `json:"branch,omitempty"`
 	Depth   int    `json:"depth,omitempty"`
+	// Force reset local branch to remote branch reference
+	Force bool `json:"force,omitempty"`
 	// The interval at which repository updates automatically.
 	UpdateInterval int              `json:"update_interval,omitempty"`
 	Auth           *AuthConfig      `json:"auth,omitempty"`

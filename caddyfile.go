@@ -64,6 +64,7 @@ var argRules = map[string]argRule{
 	"auth":     argRule{Min: 2, Max: 255},
 	"branch":   argRule{Min: 1, Max: 1},
 	"depth":    argRule{Min: 1, Max: 1},
+	"force":    argRule{Min: 1, Max: 1},
 	"update":   argRule{Min: 1, Max: 255},
 	"webhook":  argRule{Min: 3, Max: 3},
 	"post":     argRule{Min: 2, Max: 2},
@@ -147,6 +148,12 @@ func parseCaddyfileAppConfig(d *caddyfile.Dispenser, _ interface{}) (interface{}
 						return nil, d.Errf("%s value %q is not integer", k, v[0])
 					}
 					// return nil, d.Errf("the depth directive is disabled due to the issue with github.com/go-git/go-git")
+				case "force":
+					if f, err := strconv.ParseBool(v[0]); err == nil {
+						rc.Force = f
+					} else {
+						return nil, d.Errf("%s value %q is not boolean", k, v[0])
+					}
 				case "post":
 					switch {
 					case strings.Join(v, " ") == "pull exec":

@@ -155,7 +155,31 @@ func (r *Repository) runUpdate() error {
 			)
 			return nil
 		}
-		return err
+		if err == git.ErrNonFastForwardUpdate && r.Config.Force {
+			remoteRef := plumbing.NewRemoteReferenceName(opts.RemoteName, r.Config.Branch)
+			ref, err := repo.Reference(remoteRef, true)
+			if err != nil {
+				return err
+			}
+
+			resetOpts := &git.ResetOptions{
+				Commit: ref.Hash(),
+				Mode:   git.HardReset,
+			}
+			err = w.Reset(resetOpts)
+			if err != nil {
+				return err
+			}
+
+			r.logger.Info(
+				"force hard reset from remote",
+				zap.String("remote_ref", remoteRef.String()),
+				zap.Any("commit", ref.Hash()),
+			)
+			return nil
+		} else {
+			return err
+		}
 	}
 	ref, err := repo.Head()
 	if err != nil {

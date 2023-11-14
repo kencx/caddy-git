@@ -42,6 +42,7 @@ func TestParseCaddyfileAppConfig(t *testing.T) {
                 base_dir /tmp
                 url https://github.com/authp/authp.github.io.git
                 branch gh-pages
+                force true
               }
             }`),
 			want: `{
@@ -51,6 +52,7 @@ func TestParseCaddyfileAppConfig(t *testing.T) {
                     "address":  "https://github.com/authp/authp.github.io.git",
                     "base_dir": "/tmp",
                     "branch":   "gh-pages",
+                    "force":    true,
                     "name":     "authp.github.io"
                   }
                 ]
